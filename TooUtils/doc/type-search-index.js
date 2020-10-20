@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"tsi.too.io","l":"BinaryFile"},{"p":"tsi.too.io","l":"BinaryFile.OpenMode"}]
