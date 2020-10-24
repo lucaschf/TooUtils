@@ -418,26 +418,31 @@ public abstract class InputDialog {
 		 * Checks if the input is accepted. 
 		 * 
 		 * <p><b>ATTENTION:</b> To be accepted as valid, the {@link #getErrorMessage(Object)} 
-		 * must be equals {@link #DEFAULT_SUCCESS_MESSAGE}. 
+		 * must be equals {@link #DEFAULT_SUCCESS_MESSAGE} or null. 
 		 * </p>
 		 * 
 		 * @param input the input to be validated
 		 * @return the validation result.
 		 */
 		default boolean isValid(E input) {
-			return getErrorMessage(input).equals(DEFAULT_SUCCESS_MESSAGE);
+			var message = getErrorMessage(input);
+			return message == null || message.equals(DEFAULT_SUCCESS_MESSAGE);
 		}
 	}
 
 	/**
 	 * Creates an default {@link InputValidator} for empty strings.
 	 * 
-	 * @param message the message to return if validation fails.
+	 * @param errorMessage the message to return if validation fails.
 	 * @return the created {@link InputValidator}.
+	 * @throws IllegalArgumentException if {@code errorMessage} is null or blank
 	 * 
 	 * @since 0.1
 	 */
-	public static final InputValidator<String> createEmptyStringValidator(String message) {
+	public static final InputValidator<String> createEmptyStringValidator(String errorMessage) throws IllegalArgumentException {
+		if(errorMessage == null || errorMessage.isBlank())
+			throw new IllegalArgumentException("errorMessage cannot be empty");
+		
 		return new InputValidator<String>() {
 			@Override
 			public String getErrorMessage(String input) {
@@ -451,21 +456,26 @@ public abstract class InputDialog {
 	 * 
 	 * @param beginInclusive the first element of the range.
 	 * @param endInclusive the last element of the range.
-	 * @param validationMessage the message to return if validation fails.
+	 * @param errorMessage the message to return if validation fails.
 	 * @return a {@link InputValidator} for Double range values.
+	 * 
+	 * @throws IllegalArgumentException if {@code errorMessage} is null or blank
 	 * 
 	 * @since 0.1
 	 */
 	public static final InputValidator<Double> createRangeValidator(
 			double beginInclusive, 
 			double endInclusive, 
-			String validationMessage
-	) {
+			String errorMessage
+	) throws IllegalArgumentException {
+		if(errorMessage == null || errorMessage.isBlank())
+			throw new IllegalArgumentException("errorMessage cannot be empty");
+		
 		return new InputValidator<Double>() {
 			@Override
 			public String getErrorMessage(Double input) {
 				return input <= endInclusive 
-						&& input>= beginInclusive ? DEFAULT_SUCCESS_MESSAGE : validationMessage;
+						&& input>= beginInclusive ? DEFAULT_SUCCESS_MESSAGE : errorMessage;
 			}			
 		};
 	}
