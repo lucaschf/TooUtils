@@ -24,26 +24,6 @@ public abstract class UiUtils {
 		}
 	}
 		
-	public static JFormattedTextField createCurrencyTextField() {
-		var ftfUnitaryPrice = new JFormattedTextField(0.0);
-		ftfUnitaryPrice.setFormatterFactory(new AbstractFormatterFactory() {
-			@Override
-			public AbstractFormatter getFormatter(JFormattedTextField tf) {
-				NumberFormat format = DecimalFormat.getInstance();
-				format.setMinimumFractionDigits(2);
-				format.setMaximumFractionDigits(2);
-				format.setRoundingMode(RoundingMode.HALF_UP);
-				InternationalFormatter formatter = new InternationalFormatter(format);
-				formatter.setAllowsInvalid(false);
-				formatter.setMinimum(0.0);
-				formatter.setMaximum(1000000.00);
-				return formatter;
-			}
-		});
-		
-		return ftfUnitaryPrice;
-	}
-	
 	public static AbstractFormatterFactory createCurrencyFormatterFactory(Double minValue, Double maxValue) {
 		return new AbstractFormatterFactory() {
             @Override
