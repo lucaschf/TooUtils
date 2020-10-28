@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides operations for a binary file using the services of a file with
@@ -23,7 +25,7 @@ import java.nio.channels.FileChannel;
  *
  * @author Lucas Cristovam
  * @author Prof. Márlon Oliveira da Silva
- * @version 0.37
+ * @version 0.38
  */
 public abstract class BinaryFile<E> {
 	private String fileName;
@@ -180,7 +182,36 @@ public abstract class BinaryFile<E> {
 
 		return read();
 	}
-
+	
+	/**
+	 * Adds a new record to the end of the file.
+	 * 
+	 * @param e the <code>E</code> to be recorded.
+	 * @throws IOException if an I/O error occurs.
+	 * 
+	 * @since 0.38
+	 */
+	public void writeAtEnd(E e) throws IOException	{
+		file.seek(file.length());
+		write(e);
+	}
+	
+	public void update(long pos, E newData ) throws IOException{
+		seekRecord(pos);
+		write(newData);
+	}
+	
+	public List<E> readAllFile() throws IOException{
+		var list = new ArrayList<E>();
+		
+		seekRecord(0);
+		
+		for(long i = 0; i < countRecords(); i++)
+			list.add(read());
+		
+		return list;
+	}
+		
 	/**
 	 * Reads the last record of the file.
 	 * 
