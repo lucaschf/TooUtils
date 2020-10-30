@@ -5,8 +5,11 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import javax.swing.JFormattedTextField;
+import javax.swing.SwingConstants;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JFormattedTextField.AbstractFormatterFactory;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.InternationalFormatter;
 import javax.swing.text.MaskFormatter;
 
@@ -40,5 +43,10 @@ public abstract class UiUtils {
                 return formatter;
             }
         };
+	}
+	
+	public static void setHorizontalAlignment(JTable table, int alignment) {
+		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+		renderer.setHorizontalAlignment(alignment);
 	}
 }

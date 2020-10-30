@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,7 +23,7 @@ import tsi.too.util.Pair;
  * access.
  * 
  * <p>
- * <b>ATTENTION:</b> The file structure in relation to the amount and types of
+ * <b>WARNING:</b> The file structure in relation to the amount and types of
  * data in the record is defined by the user of the class. However, the size of
  * the records is required to be fixed. This restriction is fundamental for the
  * correct functioning of the methods of the <code>BinaryFile</code> class.
@@ -31,7 +33,7 @@ import tsi.too.util.Pair;
  *
  * @author Lucas Cristovam
  * @author Prof. Márlon Oliveira da Silva
- * @version 0.39
+ * @version 0.40
  */
 public abstract class BinaryFile<E> {
 	private String fileName;
@@ -136,6 +138,33 @@ public abstract class BinaryFile<E> {
 	}
 
 	/**
+	 * Writes a {@link LocalDateTime} in file.
+	 * 
+	 * @param date    the {@link LocalDateTime} to write.
+	 * @param pattern the date pattern.
+	 * @throws IOException if an I / O occurs.
+	 * 
+	 * @since 0.40
+	 */
+	public void writeLocalDateTime(LocalDateTime date, String pattern) throws IOException {
+		var target = date.format(DateTimeFormatter.ofPattern(pattern));
+		writeString(target, pattern.length());
+	}
+
+	/**
+	 * Reads a {@link LocalDateTime} from file.
+	 * 
+	 * @param pattern the date pattern.
+	 * @throws IOException if an I / O occurs.
+	 * 
+	 * @since 0.40
+	 */
+	public LocalDateTime readDateTime(String pattern) throws IOException {
+		var strDate = readString(pattern.length());
+		return LocalDateTime.parse(strDate, DateTimeFormatter.ofPattern(pattern));
+	}
+
+	/**
 	 * Writes a string in file.
 	 * 
 	 * @param str  the string to be write.
@@ -206,10 +235,11 @@ public abstract class BinaryFile<E> {
 	 * Updates the record for the given <code>pos</code>.
 	 * 
 	 * <p>
-	 * <b> WARNING: </b> this action will overwrite ALL the current data of the target position, 
-	 * if you are using Ids to control the stored data, make sure the new data has the same id as the current record. 
+	 * <b> WARNING: </b> this action will overwrite ALL the current data of the
+	 * target position, if you are using Ids to control the stored data, make sure
+	 * the new data has the same id as the current record.
 	 * 
-	 * @param pos the position of the record in file.
+	 * @param pos     the position of the record in file.
 	 * @param newData the new record data.
 	 * @throws IOException if an I/O error occurs.
 	 * 
@@ -266,7 +296,8 @@ public abstract class BinaryFile<E> {
 	 * Fetch a record based on a{@link Predicate}
 	 * 
 	 * @param p the {@link Predicate} for item test.
-	 * @return a {@link Pair} containing the record found and its position on file if found, null otherwise.
+	 * @return a {@link Pair} containing the record found and its position on file
+	 *         if found, null otherwise.
 	 * @throws IOException if an I/O error occurs.
 	 * 
 	 * @since 0.39
@@ -279,7 +310,7 @@ public abstract class BinaryFile<E> {
 		for (long i = 0; i < countRecords(); i++) {
 			item = read();
 
-			if(p.test(item))
+			if (p.test(item))
 				return new Pair<E, Long>(item, i);
 		}
 
