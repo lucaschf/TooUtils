@@ -5,7 +5,13 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import tsi.too.util.Pair;
 
 /**
  * Provides operations for a binary file using the services of a file with
@@ -25,7 +31,7 @@ import java.util.List;
  *
  * @author Lucas Cristovam
  * @author Prof. Márlon Oliveira da Silva
- * @version 0.38
+ * @version 0.39
  */
 public abstract class BinaryFile<E> {
 	private String fileName;
@@ -182,7 +188,7 @@ public abstract class BinaryFile<E> {
 
 		return read();
 	}
-	
+
 	/**
 	 * Adds a new record to the end of the file.
 	 * 
@@ -191,31 +197,100 @@ public abstract class BinaryFile<E> {
 	 * 
 	 * @since 0.38
 	 */
-	public void writeAtEnd(E e) throws IOException	{
+	public void writeAtEnd(E e) throws IOException {
 		file.seek(file.length());
 		write(e);
 	}
-	
-	public void update(long pos, E newData ) throws IOException{
+
+	/**
+	 * Updates the record for the given <code>pos</code>.
+	 * 
+	 * <p>
+	 * <b> WARNING: </b> this action will overwrite ALL the current data of the target position, 
+	 * if you are using Ids to control the stored data, make sure the new data has the same id as the current record. 
+	 * 
+	 * @param pos the position of the record in file.
+	 * @param newData the new record data.
+	 * @throws IOException if an I/O error occurs.
+	 * 
+	 * @since 0.38
+	 */
+	public void update(long pos, E newData) throws IOException {
 		seekRecord(pos);
 		write(newData);
 	}
-	
-	public List<E> readAllFile() throws IOException{
+
+	/**
+	 * Reads all file as a list.
+	 * 
+	 * @return the resulting list.
+	 * @throws IOException if an I/O error occurs.
+	 * 
+	 * @since 0.37
+	 */
+	public List<E> readAllFile() throws IOException {
 		var list = new ArrayList<E>();
-		
+
 		seekRecord(0);
-		
-		for(long i = 0; i < countRecords(); i++)
+
+		for (long i = 0; i < countRecords(); i++)
 			list.add(read());
-		
+
 		return list;
 	}
-		
+
+	/**
+	 * Reads all file as a vector.
+	 * 
+	 * @return the resulting vector.
+	 * @throws IOException if an I/O error occurs.
+	 * 
+	 * @since 0.37
+	 */
+	public Vector<E> ReadAllFile() throws IOException {
+		Vector<E> v = new Vector<E>();
+
+		seekRecord(0);
+
+		for (long i = 0; i < countRecords(); i++)
+			v.add(read());
+
+		return v;
+	}
+
+	public Collection<E> ReadAllFile(Predicate<E> predicate) throws IOException {
+		return readAllFile().stream().filter(predicate).collect(Collectors.toList());
+	}
+
+	/**
+	 * Fetch a record based on a{@link Predicate}
+	 * 
+	 * @param p the {@link Predicate} for item test.
+	 * @return a {@link Pair} containing the record found and its position on file if found, null otherwise.
+	 * @throws IOException if an I/O error occurs.
+	 * 
+	 * @since 0.39
+	 */
+	public Pair<E, Long> fetch(Predicate<E> p) throws IOException {
+		seekRecord(0);
+
+		E item;
+
+		for (long i = 0; i < countRecords(); i++) {
+			item = read();
+
+			if(p.test(item))
+				return new Pair<E, Long>(item, i);
+		}
+
+		return null;
+	}
+
 	/**
 	 * Reads the last record of the file.
 	 * 
-	 * @return the read record as object of type <code>E</code> or null if there is no records in file.
+	 * @return the read record as object of type <code>E</code> or null if there is
+	 *         no records in file.
 	 * 
 	 * @since 0.37
 	 */
@@ -236,7 +311,7 @@ public abstract class BinaryFile<E> {
 	 * 
 	 * @since 0.35
 	 */
-	public void removeRecord(int position) throws IOException {
+	public void removeRecord(long position) throws IOException {
 		seekLastRecord();
 
 		// if the position is not the last, overwrite the destination record with the

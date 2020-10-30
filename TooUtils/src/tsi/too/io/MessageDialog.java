@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -24,7 +25,7 @@ import javax.swing.table.TableModel;
  * 
  * @author Lucas Cristovam
  * 
- * @version 0.1
+ * @version 0.2
  */
 public abstract class MessageDialog {
     
@@ -92,6 +93,32 @@ public abstract class MessageDialog {
     }
     
     /**
+     * Brings up an error-message dialog.
+     *
+     * @param title   the <code>Object</code> to display in the dialog title bar.
+     * @param message the <code>Object</code> to display.
+     * 
+     * @since 0.2
+     */
+    public static void showErrorDialog(String title, Object message) {
+    	showErrorDialog(null, title, message);
+    }
+    
+    
+    /**
+     * Brings up an error-message dialog.
+     *
+     * @param parentComponent the {@link Frame} to which this dialog is associated.
+     * @param title   the <code>Object</code> to display in the dialog title bar.
+     * @param message the <code>Object</code> to display.
+     * 
+     * @since 0.2
+     */
+    public static void showErrorDialog(Component parentComponent, String title, Object message) {
+        showMessageDialog(parentComponent, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+    
+    /**
      * Brings up an alert-message dialog.
      *
      * @param title   the <code>Object</code> to display in the dialog title bar.
@@ -102,6 +129,7 @@ public abstract class MessageDialog {
     public static void showAlertDialog(String title, Object message) {
     	showAlertDialog(null, title, message);
     }
+
 
     /**
      * Brings up a confirmation dialog with <code>YES_NO_OPTION</code> options.
