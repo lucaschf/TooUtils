@@ -155,6 +155,7 @@ public abstract class BinaryFile<E> {
 	 * Reads a {@link LocalDateTime} from file.
 	 * 
 	 * @param pattern the date pattern.
+	 * @return the read LocalDateTime
 	 * @throws IOException if an I / O occurs.
 	 * 
 	 * @since 0.40
@@ -277,7 +278,7 @@ public abstract class BinaryFile<E> {
 	 * 
 	 * @since 0.37
 	 */
-	public Vector<E> ReadAllFile() throws IOException {
+	public Vector<E> readAllFileAsVector() throws IOException {
 		Vector<E> v = new Vector<E>();
 
 		seekRecord(0);
@@ -288,7 +289,7 @@ public abstract class BinaryFile<E> {
 		return v;
 	}
 
-	public Collection<E> ReadAllFile(Predicate<E> predicate) throws IOException {
+	public Collection<E> readAllFile(Predicate<E> predicate) throws IOException {
 		return readAllFile().stream().filter(predicate).collect(Collectors.toList());
 	}
 
