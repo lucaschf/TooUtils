@@ -48,4 +48,17 @@ public abstract class UiUtils {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(alignment);
 	}
+	
+	public static MaskFormatter createTimeMaskFormatter() {
+		String mask = "##:##:##";
+		
+		try {
+			MaskFormatter maskFormatter = new MaskFormatter(mask);
+			maskFormatter.setPlaceholderCharacter('_');
+
+			return maskFormatter;
+		} catch (Exception ex) {
+			return null;
+		}
+	}
 }
