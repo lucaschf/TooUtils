@@ -12,7 +12,21 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.InternationalFormatter;
 import javax.swing.text.MaskFormatter;
 
+/**
+ * Convenience class for commonly used UI methods.
+ * 
+ * @author Lucas Cristovam
+ * @version 0.2
+ */
 public class UiUtils {
+	
+	/**
+	 * Creates a {@link MaskFormatter} foe Brazilian date
+	 * 
+	 * @return the created {@link MaskFormatter}
+	 * 
+	 * @since 0.1
+	 */
 	public static MaskFormatter createBrazilianDateMaskFormatter() {
 		String mask = "##/##/####";
 		
@@ -26,6 +40,15 @@ public class UiUtils {
 		}
 	}
 		
+	/**
+	 * Creates a {@link AbstractFormatterFactory} for currency.
+	 * 
+	 * @param minValue the minimum acceptable value.
+	 * @param maxValue the maximum acceptable value.
+	 * @return the created {@link AbstractFormatterFactory}.
+	 * 
+	 * @since 0.1
+	 */
 	public static AbstractFormatterFactory createCurrencyFormatterFactory(Double minValue, Double maxValue) {
 		return new AbstractFormatterFactory() {
             @Override
@@ -44,11 +67,26 @@ public class UiUtils {
         };
 	}
 	
+	/**
+	 * Sets the table horizontal alignment.
+	 * 
+	 * @param table the target table.
+	 * @param alignment the target alignment.
+	 * 
+	 * @since 0.1
+	 */
 	public static void setHorizontalAlignment(JTable table, int alignment) {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(alignment);
 	}
 	
+	/**
+	 * Creates a {@link MaskFormatter} for time in HH:mm:ss.
+	 * 
+	 * @return the created {@link MaskFormatter}.
+	 * 
+	 * @since 0.2.
+	 */
 	public static MaskFormatter createTimeMaskFormatter() {
 		String mask = "##:##:##";
 		

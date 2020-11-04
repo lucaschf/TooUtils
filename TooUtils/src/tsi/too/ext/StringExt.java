@@ -9,10 +9,9 @@ import java.util.Locale;
 import tsi.too.util.LocaleUtils;
 
 /**
- * Convenience class for {@link String} operations
+ * Convenience class for common {@link String} operations.
  * 
  * @author Lucas Cristovam
- * 
  * @version 0.3
  */
 public class StringExt {
@@ -74,7 +73,7 @@ public class StringExt {
 	 * @throws NumberFormatException if the string does not contain
      *         a parsable {@code double}
 	 * 
-	 * @since 0.4
+	 * @since 0.1
 	 */
 	public static double toDouble(final String str) throws NumberFormatException{
 		if (str.contains(",")) {
