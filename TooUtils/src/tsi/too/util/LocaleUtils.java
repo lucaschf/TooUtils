@@ -9,7 +9,7 @@ import java.util.Locale;
  * 
  * @version 0.1
  */
-public abstract class LocaleUtils {
+public class LocaleUtils {
 	
 	/**
 	 * Get a {@code Locale} as a Brazilian Locale.

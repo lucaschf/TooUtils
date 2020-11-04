@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.InternationalFormatter;
 import javax.swing.text.MaskFormatter;
 
-public abstract class UiUtils {
+public class UiUtils {
 	public static MaskFormatter createBrazilianDateMaskFormatter() {
 		String mask = "##/##/####";
 		

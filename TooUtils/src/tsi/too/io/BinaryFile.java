@@ -4,10 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import java.util.function.Predicate;
@@ -166,6 +166,34 @@ public abstract class BinaryFile<E> {
 	}
 
 	/**
+	 * Writes a {@link LocalDate} in file.
+	 * 
+	 * @param date    the {@link LocalDate} to write.
+	 * @param pattern the date pattern.
+	 * @throws IOException if an I / O occurs.
+	 * 
+	 * @since 0.41
+	 */
+	public void writeLocalDate(LocalDate date, String pattern) throws IOException {
+		var target = date.format(DateTimeFormatter.ofPattern(pattern));
+		writeString(target, pattern.length());
+	}
+
+	/**
+	 * Reads a {@link LocalDate} from file.
+	 * 
+	 * @param pattern the date pattern.
+	 * @return the read LocalDateTime
+	 * @throws IOException if an I / O occurs.
+	 * 
+	 * @since 0.41
+	 */
+	public LocalDate readDate(String pattern) throws IOException {
+		var strDate = readString(pattern.length());
+		return LocalDate.parse(strDate, DateTimeFormatter.ofPattern(pattern));
+	}
+
+	/**
 	 * Writes a string in file.
 	 * 
 	 * @param str  the string to be write.
@@ -289,7 +317,7 @@ public abstract class BinaryFile<E> {
 		return v;
 	}
 
-	public Collection<E> readAllFile(Predicate<E> predicate) throws IOException {
+	public List<E> readAllFile(Predicate<E> predicate) throws IOException {
 		return readAllFile().stream().filter(predicate).collect(Collectors.toList());
 	}
 

@@ -13,9 +13,9 @@ import tsi.too.util.LocaleUtils;
  * 
  * @author Lucas Cristovam
  * 
- * @version 0.2
+ * @version 0.3
  */
-public abstract class StringExt {
+public class StringExt {
 
 	/**
 	 * Creates a copy of the string without its last character.
@@ -38,6 +38,7 @@ public abstract class StringExt {
 	 * 
 	 * @since 0.1
 	 */
+	@Deprecated
 	public static long toLong(final String str) {
 		try {
 			return Long.parseLong(str);
@@ -55,6 +56,7 @@ public abstract class StringExt {
 	 * 
 	 * @since 0.1
 	 */
+	@Deprecated
 	public static int toInt(final String str) {
 		try {
 			return Integer.parseInt(str);
@@ -69,38 +71,19 @@ public abstract class StringExt {
 	 * @param str the {@code String} to be parsed.
 	 * @return the {@code Double} value represented by the {@code String} or
 	 *         {@code 0} if the {@code String} cannot be parsed.
+	 * @throws NumberFormatException if the string does not contain
+     *         a parsable {@code double}
 	 * 
-	 * @since 0.1
+	 * @since 0.4
 	 */
-	public static double toDouble(final String str) {
-		try {
-			if (str.contains(",")) {
-				return Double.parseDouble(str.replace(",", ""));
-			}
-			
-			return Double.parseDouble(str);
-		} catch (NumberFormatException ex) {
-			return 0;
+	public static double toDouble(final String str) throws NumberFormatException{
+		if (str.contains(",")) {
+			return Double.parseDouble(str.replace(",", ""));
 		}
+		
+		return Double.parseDouble(str);
 	}
-
-	/**
-	 * Parses the {@code String} as a {@code BigDecimal} and returns the result.
-	 * 
-	 * @param str the {@code String} to be parsed.
-	 * @return the {@code BigDecimal} value represented by the {@code String} or
-	 *         {@code 0} if the {@code String} cannot be parsed.
-	 * 
-	 * @since 0.1
-	 */
-	public static BigDecimal toBigDecimal(final String str) {
-		try {
-			return new BigDecimal(str);
-		} catch (NumberFormatException ex) {
-			return BigDecimal.ZERO;
-		}
-	}
-
+ 
 	/**
 	 * Parses the formated Brazilian currency{@code String} as a {@code BigDecimal}
 	 * and returns the result.

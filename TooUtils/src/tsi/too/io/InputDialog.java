@@ -21,13 +21,13 @@ import tsi.too.ext.StringExt;
  * 
  * @author Lucas Cristovam
  * 
- * @version 0.1
+ * @version 0.2
  */
-public abstract class InputDialog {
+public class InputDialog {
 
 	/**
-	 * Shows a dialog requesting input from the user. Loops until the validation rule is satisfied or the user cancels the
-	 * reading.
+	 * Shows a dialog requesting input from the user. Loops until the validation
+	 * rule is satisfied or the user cancels the reading.
 	 *
 	 * @param title     the <code>Object</code> to display in the dialog title bar.
 	 * @param message   the <code>Object</code> to display.
@@ -37,7 +37,7 @@ public abstract class InputDialog {
 	 * @since 0.1
 	 */
 	public static Integer showIntegerInputDialog(String title, String message, InputValidator<Integer> validator) {
-		int input;
+		Integer input;
 		String s;
 
 		var isValid = false;
@@ -47,8 +47,13 @@ public abstract class InputDialog {
 			if (s == null)
 				return null;
 
-			input = StringExt.toInt(s);
-			isValid = validator.isValid(input);
+			try {
+				input = Integer.parseInt(s);
+				isValid = validator.isValid(input);
+			} catch (NumberFormatException e) {
+				input = null;
+				isValid = false;
+			}
 
 			if (!isValid)
 				MessageDialog.showAlertDialog(title, validator.getErrorMessage(input));
@@ -58,8 +63,8 @@ public abstract class InputDialog {
 	}
 
 	/**
-	 * Shows a dialog requesting input from the user. Loops until the validation rule is satisfied or the user cancels the
-	 * reading.
+	 * Shows a dialog requesting input from the user. Loops until the validation
+	 * rule is satisfied or the user cancels the reading.
 	 *
 	 * @param title     the <code>Object</code> to display in the dialog title bar.
 	 * @param message   the <code>Object</code> to display.
@@ -69,7 +74,7 @@ public abstract class InputDialog {
 	 * @since 0.1
 	 */
 	public static Long showLongInputDialog(String title, String message, InputValidator<Long> validator) {
-		long input;
+		Long input;
 		String s;
 		var isValid = false;
 
@@ -78,8 +83,12 @@ public abstract class InputDialog {
 			if (s == null)
 				return null;
 
-			input = StringExt.toLong(s);
-			isValid = validator.isValid(input);
+			try {
+				input = Long.parseLong(s);
+				isValid = validator.isValid(input);
+			} catch (NumberFormatException e) {
+				input = null;
+			}
 
 			if (!isValid)
 				MessageDialog.showAlertDialog(title, validator.getErrorMessage(input));
@@ -89,8 +98,8 @@ public abstract class InputDialog {
 	}
 
 	/**
-	 * Shows a dialog requesting input from the user. Loops until the validation rule is satisfied or the user cancels the
-	 * reading.
+	 * Shows a dialog requesting input from the user. Loops until the validation
+	 * rule is satisfied or the user cancels the reading.
 	 *
 	 * @param title     the <code>Object</code> to display in the dialog title bar.
 	 * @param message   the <code>Object</code> to display.
@@ -99,12 +108,8 @@ public abstract class InputDialog {
 	 * 
 	 * @since 0.1
 	 */
-	public static Double showDoubleInputDialog(
-			String title,
-			String message,
-			InputValidator<Double> validator
-			) {
-		double input;
+	public static Double showDoubleInputDialog(String title, String message, InputValidator<Double> validator) {
+		Double input;
 		String s;
 		var isValid = false;
 
@@ -113,8 +118,12 @@ public abstract class InputDialog {
 			if (s == null)
 				return null;
 
-			input = StringExt.toDouble(s);
-			isValid = validator.isValid(input);
+			try {
+				input = StringExt.toDouble(s);
+				isValid = validator.isValid(input);
+			} catch (NumberFormatException ex) {
+				input = null;
+			}
 
 			if (!isValid)
 				MessageDialog.showAlertDialog(title, validator.getErrorMessage(input));
@@ -124,8 +133,8 @@ public abstract class InputDialog {
 	}
 
 	/**
-	 * Shows a dialog requesting input from the user. Loops until the validation rule is satisfied or the user cancels the
-	 * reading.
+	 * Shows a dialog requesting input from the user. Loops until the validation
+	 * rule is satisfied or the user cancels the reading.
 	 *
 	 * @param title     the <code>Object</code> to display in the dialog title bar.
 	 * @param message   the <code>Object</code> to display.
@@ -134,8 +143,8 @@ public abstract class InputDialog {
 	 * 
 	 * @since 0.1
 	 */
-	public static BigDecimal showBigDecimalInputDialog(
-		String title, String message, InputValidator<BigDecimal> validator) {
+	public static BigDecimal showBigDecimalInputDialog(String title, String message,
+			InputValidator<BigDecimal> validator) {
 		BigDecimal input;
 		String s;
 		var isValid = false;
@@ -145,8 +154,12 @@ public abstract class InputDialog {
 			if (s == null)
 				return null;
 
-			input = StringExt.toBigDecimal(s);
-			isValid = validator.isValid(input);
+			try {
+				input = new BigDecimal(s);
+				isValid = validator.isValid(input);
+			} catch (NumberFormatException e) {
+				input = null;
+			}
 
 			if (!isValid)
 				MessageDialog.showAlertDialog(title, validator.getErrorMessage(input));
@@ -169,11 +182,11 @@ public abstract class InputDialog {
 	}
 
 	/**
-	 * Shows a dialog requesting input from the user.Loops until the validation rule is satisfied or the user cancels the
-	 * reading.
+	 * Shows a dialog requesting input from the user.Loops until the validation rule
+	 * is satisfied or the user cancels the reading.
 	 *
-	 * @param title the <code>Object</code> to display in the dialog title bar.
-	 * @param message the <code>Object</code> to display.
+	 * @param title     the <code>Object</code> to display in the dialog title bar.
+	 * @param message   the <code>Object</code> to display.
 	 * @param validator the <code>Object</code> with validation rule.
 	 * @return user's input.
 	 * 
@@ -197,8 +210,9 @@ public abstract class InputDialog {
 	}
 
 	/**
-	 * Shows a dialog box asking for user input with the specified <code>mask</code>. Loops until the validation rule
-	 * is satisfied or the user cancels the reading.
+	 * Shows a dialog box asking for user input with the specified
+	 * <code>mask</code>. Loops until the validation rule is satisfied or the user
+	 * cancels the reading.
 	 *
 	 * @param title     the <code>Object</code> to display in the dialog title bar.
 	 * @param message   the <code>Object</code> to display.
@@ -208,12 +222,13 @@ public abstract class InputDialog {
 	 * 
 	 * @since 0.1
 	 */
-	public static String showMaskedInputDialog(String title, String message, String mask, InputValidator<String> validator) {
+	public static String showMaskedInputDialog(String title, String message, String mask,
+			InputValidator<String> validator) {
 		String input;
 		var isValid = false;
 
 		JFormattedTextField inputTextField;
-		
+
 		try {
 			MaskFormatter maskFormatter = new MaskFormatter(mask);
 			maskFormatter.setPlaceholderCharacter('_');
@@ -221,10 +236,10 @@ public abstract class InputDialog {
 		} catch (Exception ex) {
 			inputTextField = new JFormattedTextField();
 		}
-		
+
 		do {
 			input = CustomInputDialog.showSingleLineInputDialog(title, message, inputTextField);
-			
+
 			if (input == null)
 				return null;
 
@@ -238,8 +253,8 @@ public abstract class InputDialog {
 	}
 
 	/**
-	 * Shows a dialog box asking for user input. Loops until the validation rule is satisfied or the user cancels the
-	 * reading.
+	 * Shows a dialog box asking for user input. Loops until the validation rule is
+	 * satisfied or the user cancels the reading.
 	 *
 	 * @param title     the <code>Object</code> to display in the dialog title bar.
 	 * @param message   the <code>Object</code> to display.
@@ -248,18 +263,15 @@ public abstract class InputDialog {
 	 * 
 	 * @since 0.1
 	 */
-	public static LocalDate showBrazilianDateInputDialog(
-			String title,
-			String message,
-			InputValidator<LocalDate> validator
-			) {
+	public static LocalDate showBrazilianDateInputDialog(String title, String message,
+			InputValidator<LocalDate> validator) {
 		String input;
 		String mask = "##/##/####";
 		LocalDate result;
 		var isValid = false;
 
 		JFormattedTextField inputTextField;
-		
+
 		try {
 			MaskFormatter maskFormatter = new MaskFormatter(mask);
 			maskFormatter.setPlaceholderCharacter('_');
@@ -267,20 +279,20 @@ public abstract class InputDialog {
 		} catch (Exception ex) {
 			inputTextField = new JFormattedTextField();
 		}
-		
+
 		do {
 			input = CustomInputDialog.showSingleLineInputDialog(title, message, inputTextField);
-			
+
 			if (input == null)
 				return null;
 
 			try {
 				String[] spl = input.split("/");
-				result = LocalDate.of(StringExt.toInt(spl[2]), StringExt.toInt(spl[1]), StringExt.toInt(spl[0]));
+				result = LocalDate.of(Integer.parseInt(spl[2]), Integer.parseInt(spl[1]), Integer.parseInt((spl[0])));
 			} catch (Exception ex) {
 				result = null;
 			}
-			
+
 			isValid = result != null && validator.isValid(result);
 			if (!isValid)
 				MessageDialog.showAlertDialog(title, validator.getErrorMessage(result));
@@ -294,7 +306,7 @@ public abstract class InputDialog {
 	 * 
 	 * @param title     the <code>Object</code> to display in the dialog title bar.
 	 * @param message   the <code>Object</code> to display.
-	 * @param dimension the preferred dialog dimension. 
+	 * @param dimension the preferred dialog dimension.
 	 * @return user's input.
 	 * 
 	 * @since 0.1
@@ -303,7 +315,7 @@ public abstract class InputDialog {
 		int rows;
 		int columns;
 		Dimension dialogDimension;
-		
+
 		switch (dimension) {
 			case SMALL:
 				rows = 15;
@@ -318,18 +330,14 @@ public abstract class InputDialog {
 			default:
 				rows = 30;
 				columns = 20;
-				dialogDimension = CustomInputDialog.LARGE_MULTILINE_DIALOG;			
+				dialogDimension = CustomInputDialog.LARGE_MULTILINE_DIALOG;
 				break;
 		}
-		
-		return CustomInputDialog.showMultiLineInputDialog(
-				title,
-				message, 
-				new JTextArea(rows, columns),
-				dialogDimension
-		);
+
+		return CustomInputDialog.showMultiLineInputDialog(title, message, new JTextArea(rows, columns),
+				dialogDimension);
 	}
-	
+
 	/**
 	 * Brings up a choice dialog, where the initial choice is the first one.
 	 *
@@ -342,15 +350,8 @@ public abstract class InputDialog {
 	 * @since 0.1
 	 */
 	public static <E> E showOptionDialog(String title, String message, E[] options) {
-		int selected = JOptionPane.showOptionDialog(null,
-				message,
-				title,
-				JOptionPane.DEFAULT_OPTION,
-				JOptionPane.PLAIN_MESSAGE,
-				null,
-				options,
-				options[0]
-				);
+		int selected = JOptionPane.showOptionDialog(null, message, title, JOptionPane.DEFAULT_OPTION,
+				JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
 		if (selected != JOptionPane.CLOSED_OPTION)
 			return options[selected];
@@ -359,40 +360,36 @@ public abstract class InputDialog {
 	}
 
 	/**
-	 * Brings up a choice dialog, where the initial choice is the first one and executes 
-	 * an action based on the selected option. If the user closes the dialog, no action is taken.
+	 * Brings up a choice dialog, where the initial choice is the first one and
+	 * executes an action based on the selected option. If the user closes the
+	 * dialog, no action is taken.
 	 *
-	 * @param title   the title string for the dialog.
-	 * @param message the message to display.
-	 * @param options the available choices.
+	 * @param title      the title string for the dialog.
+	 * @param message    the message to display.
+	 * @param options    the available choices.
 	 * @param exitOption the default loop cancel option.
-	 * @param executor the executor to the selected option.
+	 * @param executor   the executor to the selected option.
 	 * 
 	 * @since 0.1
 	 */
-	public static void showMenuDialog(
-			String title, 
-			String message, 
-			final List<String> options,
-			String exitOption,
-			Executor<String> executor
-	){
+	public static void showMenuDialog(String title, String message, final List<String> options, String exitOption,
+			Executor<String> executor) {
 		String selected;
 
 		List<String> l = new ArrayList<>();
 		l.addAll(options);
 
-		if(!l.contains(exitOption))
+		if (!l.contains(exitOption))
 			l.add(exitOption);
 
 		do {
 			selected = showOptionDialog(title, message, l.toArray(String[]::new));
 
-			if(selected != null) // user selected a valid option.
+			if (selected != null) // user selected a valid option.
 				executor.execute(selected);
-		}while(selected != null && !selected.equals(exitOption));
+		} while (selected != null && !selected.equals(exitOption));
 	}
-	
+
 	/**
 	 * A processor that checks an input.
 	 * 
@@ -407,7 +404,8 @@ public abstract class InputDialog {
 		String FIELD_CANNOT_BE_EMPTY = "Este campo n�o pode ficar vazio.";
 
 		/**
-		 * Gets error message. If there is no error, it must returns {@link #DEFAULT_SUCCESS_MESSAGE}.
+		 * Gets error message. If there is no error, it must returns
+		 * {@link #DEFAULT_SUCCESS_MESSAGE}.
 		 *
 		 * @param input the <code>Object</code> to be validated.
 		 * @return the validation result.
@@ -415,10 +413,12 @@ public abstract class InputDialog {
 		String getErrorMessage(E input);
 
 		/**
-		 * Checks if the input is accepted. 
+		 * Checks if the input is accepted.
 		 * 
-		 * <p><b>ATTENTION:</b> To be accepted as valid, the {@link #getErrorMessage(Object)} 
-		 * must be equals {@link #DEFAULT_SUCCESS_MESSAGE} or null. 
+		 * <p>
+		 * <b>ATTENTION:</b> To be accepted as valid, the
+		 * {@link #getErrorMessage(Object)} must be equals
+		 * {@link #DEFAULT_SUCCESS_MESSAGE} or null.
 		 * </p>
 		 * 
 		 * @param input the input to be validated
@@ -439,10 +439,11 @@ public abstract class InputDialog {
 	 * 
 	 * @since 0.1
 	 */
-	public static final InputValidator<String> createEmptyStringValidator(String errorMessage) throws IllegalArgumentException {
-		if(errorMessage == null || errorMessage.isBlank())
+	public static final InputValidator<String> createEmptyStringValidator(String errorMessage)
+			throws IllegalArgumentException {
+		if (errorMessage == null || errorMessage.isBlank())
 			throw new IllegalArgumentException("errorMessage cannot be empty");
-		
+
 		return new InputValidator<String>() {
 			@Override
 			public String getErrorMessage(String input) {
@@ -450,36 +451,32 @@ public abstract class InputDialog {
 			}
 		};
 	}
-	
+
 	/**
 	 * Creates a double range {@link InputValidator}
 	 * 
 	 * @param beginInclusive the first element of the range.
-	 * @param endInclusive the last element of the range.
-	 * @param errorMessage the message to return if validation fails.
+	 * @param endInclusive   the last element of the range.
+	 * @param errorMessage   the message to return if validation fails.
 	 * @return a {@link InputValidator} for Double range values.
 	 * 
 	 * @throws IllegalArgumentException if {@code errorMessage} is null or blank
 	 * 
 	 * @since 0.1
 	 */
-	public static final InputValidator<Double> createRangeValidator(
-			double beginInclusive, 
-			double endInclusive, 
-			String errorMessage
-	) throws IllegalArgumentException {
-		if(errorMessage == null || errorMessage.isBlank())
+	public static final InputValidator<Double> createRangeValidator(double beginInclusive, double endInclusive,
+			String errorMessage) throws IllegalArgumentException {
+		if (errorMessage == null || errorMessage.isBlank())
 			throw new IllegalArgumentException("errorMessage cannot be empty");
-		
+
 		return new InputValidator<Double>() {
 			@Override
 			public String getErrorMessage(Double input) {
-				return input <= endInclusive 
-						&& input>= beginInclusive ? DEFAULT_SUCCESS_MESSAGE : errorMessage;
-			}			
+				return input <= endInclusive && input >= beginInclusive ? DEFAULT_SUCCESS_MESSAGE : errorMessage;
+			}
 		};
 	}
-		
+
 	/**
 	 * A processor for executing an action based on an object.
 	 * 
@@ -489,10 +486,10 @@ public abstract class InputDialog {
 	 * 
 	 * @since 0.1
 	 */
-	public interface Executor<E>{
+	public interface Executor<E> {
 		void execute(E action);
 	}
-	
+
 	/**
 	 * Represents the multiLine dialog dimensions.
 	 * 
@@ -500,9 +497,7 @@ public abstract class InputDialog {
 	 * 
 	 * @since 0.1
 	 */
-	public enum MultiLineDimension{
-		LARGE,
-		MEDIUM,
-		SMALL
+	public enum MultiLineDimension {
+		LARGE, MEDIUM, SMALL
 	}
 }

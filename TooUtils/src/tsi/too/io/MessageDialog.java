@@ -25,9 +25,9 @@ import javax.swing.table.TableModel;
  * 
  * @author Lucas Cristovam
  * 
- * @version 0.2
+ * @version 0.3
  */
-public abstract class MessageDialog {
+public class MessageDialog {
     
 	/**
      * Brings up an information-message dialog.

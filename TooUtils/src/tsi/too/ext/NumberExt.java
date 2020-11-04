@@ -8,10 +8,10 @@ import tsi.too.util.LocaleUtils;
  * Convenience class for common numeric operations.
  * 
  * @author Lucas Cristovam
- * @version 0.1
+ * @version 0.2
  */
 
-public abstract class NumberExt {
+public class NumberExt {
 
 	/**
 	 * Formats a number for the Brazilian currency.
